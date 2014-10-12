@@ -30,18 +30,22 @@
 			<div ng-switch-when="0">
 				<!-- Drilldown section -->
 				<h3 style="margin-top: 50px;">About the list</h3>
-				<div style="width: 100%: display: block;" class="module">
-					<div style="max-width: 10%;">
-						<ul>
-							<li>Num: {{boardgames.length}}</li>
-						<ul>
-					</div>	
-					<div class="breakdownGraphSection">
-						<highchart id="chart2" config="mechanicsChartConfig" class="span9 breakdownGraph"></highchart>
-					</div>
-					<div class="breakdownGraphSection">
-						<highchart id="chart3" config="categoriesChartConfig" class="span9 breakdownGraph"></highchart>
-					</div>
+				<ul>
+					<li>Last analysis date: {{geekliststats[0].date | date}}</li>
+					<li>Num: {{boardgames.length}}</li>
+					<li>Num lists: {{geekliststats[0].glCnt + 1}}</li>
+					<li>Depth: {{geekliststats[0].depth}}</li>
+					<li>Min list length: ?</li>
+					<li>Max list length: ?</li>
+					<li>Avg. list length: ?</li>
+					<li>Median list length: ?</li>
+					<li>St. dev. length: ?</li>
+				<ul>
+				<div class="breakdownGraphSection">
+					<highchart id="chart2" config="mechanicsChartConfig" class="span9 breakdownGraph"></highchart>
+				</div>
+				<div class="breakdownGraphSection">
+					<highchart id="chart3" config="categoriesChartConfig" class="span9 breakdownGraph"></highchart>
 				</div>
 			</div>
 			

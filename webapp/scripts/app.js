@@ -27,6 +27,8 @@ geeklistMon.controller('GeeklistCtrl', function($scope, $http){
 	var levelLabels = [];
 	var seriesColors = [];
 	
+	$scope.geekliststats = [];
+	
 	$scope.updateTable = function(){
 		console.log("Ran updateTable");
 
@@ -95,7 +97,29 @@ geeklistMon.controller('GeeklistCtrl', function($scope, $http){
 				function(){
 					console.log("This would fetch geekliststats");
 					var startTime = Date.now()
-					var urlGeeklistStat = couchDbUrl + "_design/geeklist/_view/geeklist?include_docs=true&key=\"" + $scope.geeklistId + "\"";
+					var urlGeeklistStat = couchDbUrl + "_design/geekliststat/_view/geekliststat?startkey=[\"" + $scope.geeklistId + "\"]&endkey=[\"" + $scope.geeklistId + "\", {}]&include_docs=true"
+					
+					$http.get(urlGeeklistStat).then(function(response){
+						var startTime = Date.now();
+						var geekliststats = [];
+				
+						angular.forEach(response.data.rows, function(value, key){
+							s = value.doc;
+							s.date = Date.parse(s.date);	
+							s.crets = Date.parse(s.crets);	
+					
+							geekliststats.push(s);
+						});
+						
+						$scope.geekliststats = geekliststats.sort(function(a, b){
+							if(a.date > b.date){
+								return -1;
+							}else{
+								return 1;
+							}
+						});
+					
+					});
 					console.log("Fetched geekliststat in " + (Date.now() - startTime));
 				}
 			);
