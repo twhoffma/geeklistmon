@@ -1,0 +1,190 @@
+<html ng-app="geeklistMon">
+	<head>
+		<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.18.0/es6-shim.min.js"></script>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+		<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>
+		<script src="http://code.highcharts.com/stock/highstock.src.js"></script>
+		<script src="./scripts/highcharts-ng-master/src/highcharts-ng.js"></script>
+		<script src="http://code.highcharts.com/modules/drilldown.js"></script>
+		<script src="./scripts/app.js"></script>
+		
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+		
+		<link rel="stylesheet" href="css/app.css" />
+</head>
+<body ng-controller="GeeklistCtrl">
+	<div class="topsection" id="sections">
+		<div class="topbar">
+			<form>
+				<select id="geeklists" ng-model="geeklistId" ng-options="item.id as item.key for item in geeklists">
+				</select>
+			</form>
+			<a ng-click="displaySection(0)">About the list</a>
+			<a ng-click="displaySection(1)">List of games</a>
+			<a ng-click="displaySection(2)">Boardgame details</a>
+		</div>
+		<div style="margin-top: 150px; width: 100%;" ng-switch on="selection">
+			<!-- SWITCH DRILLDOWN -->
+			<div ng-switch-when="0">
+				<!-- Drilldown section -->
+				<h3 style="margin-top: 50px;">About the list</h3>
+				<div style="width: 100%: display: block;" class="module">
+					<div style="max-width: 10%;">
+						<ul>
+							<li>Num: {{boardgames.length}}</li>
+						<ul>
+					</div>	
+					<div class="breakdownGraphSection">
+						<highchart id="chart2" config="mechanicsChartConfig" class="span9 breakdownGraph"></highchart>
+					</div>
+					<div class="breakdownGraphSection">
+						<highchart id="chart3" config="categoriesChartConfig" class="span9 breakdownGraph"></highchart>
+					</div>
+				</div>
+			</div>
+			
+			<!-- SWITCH DETAILS -->
+			<div ng-switch-when="2">
+				<!-- Details Pane -->
+				<h3>Details - {{selectedBoardgame.name}}</h3>
+				<div style="width: 100%; display: block; clear: both;" class="module">
+					<div style="display: block; width: 100%;">
+						<a href="http://www.boardgamegeek.com/boardgame/{{selectedBoardgame.objectid}}"><img src="{{selectedBoardgame.thumbnail}}" class="boardgameThumbnail"/></a>
+						<ul style="display: inline; float: left;">
+							<li><img src="img/designer-icon.png" class="icon"/>Designers:
+								<ul>
+									<li ng-repeat="d in selectedBoardgame.boardgamedesigner">
+										<a href="http://www.boardgamegeek.com/boardgamedesigner/{{d.id}}">{{d.name}}</a>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<img src="img/publisher-icon.png" class="icon"/>Publishers:
+								<ul>
+									<li ng-repeat="p in selectedBoardgame.boardgamepublisher">
+										<a href="http://www.boardgamegeek.com/boardgamepublisher/{{p.id}}">{{p.name}}</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+						<ul style="display: inline; float: left;">
+							<li>
+								<img src="img/mechanics-icon-small.png" class="icon"/>Mechanics:
+								<ul>
+									<li ng-repeat="m in selectedBoardgame.boardgamemechanic">{{m.name}}</li>
+								</ul>
+							</li>
+							<li><img src="img/category-icon.png" class="icon"/>Category:
+								<ul>
+									<li ng-repeat="c in selectedBoardgame.boardgamecategory">{{c.name}}</li>
+								</ul>
+							</li>
+						</ul>
+						<ul style="display: inline; float: left;">
+							<li><img src="img/players-icon-small.png" class="icon"/>{{selectedBoardgame.minplayers}} - {{selectedBoardgame.maxplayers}}
+							<li><img src="img/playingtime-icon-small.png" class="icon"/>{{selectedBoardgame.playingtime}}
+							<li><img src="img/link-icon.png" class="icon"/><a href="http://www.boardgamegeek.com/boardgame/{{selectedBoardgame.objectid}}">Check out on Boardgamegeek</a>
+						</ul>
+					</div>
+					<!-- Boardgame graph -->
+					<div style="display: block; float: left; clear: both; width: 100%;">
+						<form>
+							<input type="radio" ng-model="graphtype" value="hist" selected/>Histogram
+							<input type="radio" ng-model="graphtype" value="ts" />Timeseries
+						
+							<select id="statsdatedropdown" ng-model="statsDate" ng-options="item as item for item in statsDates" value="statsDates[0]">
+							</select>
+						</form>
+						<highchart id="chart1" config="boardgameChartConfig" class="span9 boardgameGraph"></highchart>
+					</div>
+				</div>
+			</div>
+			
+			
+			<!-- SWITCH DEFAULT -->
+			<div ng-switch-default>
+				<!-- Filters -->
+				<h3>Filters</h3>
+					<div style="display: block; width: 100%; clear:left;" class="module">
+						<!-- Filter row 1 -->
+						<div>	
+							<label for="designerddl" style="display: inline;">Designer</label>	
+							<select id="designerddl" ng-model="search.boardgamedesigner" ng-options="item as item for item in designers">
+								<option value="">All</option>
+							</select>
+						
+							<label for="publisherddl" style="display: inline;">Publisher</label>	
+							<select id="publisherddl" ng-model="search.boardgamepublisher" ng-options="item as item for item in publishers">
+								<option value="">All</option>
+							</select>
+					
+							<label for="expansionddl" style="display: inline;">Is Expansion</label>	
+						<select id="expansionddl" ng-model="search.isExpansion">
+								<option value="">All</option>
+								<option value="true">Yes</option>
+								<option value="false">No</option>
+						</select>
+					</div>
+					<!-- Filter row 2 -->
+					<div>
+						<label for="supported_players">Min #players</label>	
+						<input id="supported_players" ng-model="obj.maxplayers"></input>
+						<label for="minimum_year" style="display: inline;">This year or later</label>	
+						<input id="minimum_year" ng-model="obj.yearpublished"></input>
+						<label for="minimum_year" style="display: inline;">Max. playing time</label>	
+						<input id="max_playingtime" ng-model="obj2.playingtime"></input>
+					</div>
+					<div>
+						<label for="mechanicsddl" style="display: inline;">Mechanics</label>	
+						<select id="mechanicsddl" ng-model="search.boardgamemechanic" ng-options="item.name as item.name for item in mechanics">
+							<option value="">All</option>
+						</select>
+						
+						<label for="categoryddl" style="display: inline;">Categories</label>	
+						<select id="categoryddl" ng-model="search.boardgamecategory" ng-options="item.name as item.name for item in categories">
+							<option value="">All</option>
+						</select>
+					</div>
+				</div>
+				<!-- End of filters -->
+				<div>
+				<table id="geeklist">
+					<thead>
+							<tr>
+							<th><a href="" ng-click="predicate = 'name'; reverse=!reverse">Name</a></th>
+							<th><a href="" ng-click="predicate = 'isExpansion'; reverse=!reverse">Expansion</a></th>
+							<th><a href="" ng-click="predicate = 'yearpublished'; reverse=!reverse">Year</a></th>
+							<th><a href="" ng-click="predicate = 'maxplayers'; reverse=!reverse">Max Players</a></th>
+							<th><a href="" ng-click="predicate = 'playingtime'; reverse=!reverse">Playing Time</a></th>
+							<th><a href="" ng-click="predicate = 'crets'; reverse=!reverse">Crets</a></th>
+							<th><a href="" ng-click="predicate = 'cnt'; reverse=!reverse">Count</a></th>
+						</tr>	
+					</thead>
+					<tbody>
+						<tr ng-repeat="boardgame in boardgames | filter:search:ignoreNullComparator | filter:obj:greaterThan | filter:obj2:lessThan | orderBy:predicate:reverse">
+							<td>
+								<a href="http://www.boardgamegeek.com/boardgame/{{boardgame.objectid}}">{{boardgame.name}}</a>
+								<img src="img/magnify.png" ng-click="updateStatsDateDropdown(boardgame)" style="float:right;" />
+							</td>
+							<td>
+								<img ng-if="boardgame.isExpansion" src="img/branch.png" />
+								<img ng-if="!boardgame.isExpansion" src="img/root.png" />
+							</td>
+							<td>{{boardgame.yearpublished}}</td>
+							<td>{{boardgame.maxplayers}}</td>
+							<td>{{boardgame.playingtime}}</td>
+							<td>{{boardgame.crets | date:'dd-MM-yyyy HH:MM:ss'}}</td>
+							<td>{{boardgame.cnt}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<!-- END OF SWITCH DEFAULT -->
+		</div>
+		<!-- END OF SWITCH -->
+	</div>
+	<!-- END OF TOPSECTION -->	
+</body>
+</html>

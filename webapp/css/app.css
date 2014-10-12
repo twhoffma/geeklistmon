@@ -1,0 +1,77 @@
+.icon {
+	width: 32px;	
+}
+
+.boardgameGraph {
+	width: 90%; 
+	height: 50%; 
+	display: inline; 
+	float: left;
+}	
+
+.boardgameThumbnail {
+	width: 100px; 
+	float: left; 
+	margin-right: 2em; 
+	vertical-align: top;
+}	
+
+#geeklist>tbody>tr:nth-child(2n){
+	background-color: #c9c9c9;
+}
+
+#geeklist>tbody>tr>td {
+	border: 1px solid black;
+}
+
+.module {
+	margin: 5px;	
+	padding: 1em;
+}
+
+div {
+	background-color: none;
+}
+
+.body {
+	background-color: #c5c5c5;
+}
+
+h3 {
+	display: block;
+	clear: both;
+}
+
+label {
+	display: inline;
+}
+
+.topsection {
+	width: 100%;
+	clear:both;
+	/* height: 70%; */
+	/*overflow: scroll; 
+	resize: vertical;*/
+}
+				
+.topbar {
+	position: fixed; 
+	top: 0px; 
+	background-color: #c9c9c9; 
+	width: 100%; 
+	z-index: 3000;
+}
+
+.breakdownGraph {
+	width: 90%; 
+	height: 50%; 
+	display: inline; 
+	float: left;
+}
+
+.breakdownGraphSection {
+	width: 45%; 
+	clear: right; 
+	float: left; 
+	display: inline;
+}

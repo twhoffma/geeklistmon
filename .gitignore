@@ -52,3 +52,7 @@ docs/_build/
 
 # PyBuilder
 target/
+
+#project specific
+highcharts-ng-master/
+localconfig.py
