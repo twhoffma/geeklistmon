@@ -44,6 +44,7 @@ h3 {
 
 label {
 	display: inline;
+	white-space: nowrap;
 }
 
 .topsection {

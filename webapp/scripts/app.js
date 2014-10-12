@@ -1,8 +1,10 @@
 var geeklistMon = angular.module("geeklistMon", ["highcharts-ng"]);
 
 geeklistMon.controller('GeeklistCtrl', function($scope, $http){
+	var couchDbUrl = 'http://www.hoffy.no:5984/geeklistmon/';
+	
 	//Load list of lists
-	$http.get("http://www.hoffy.no:5984/geeklistmon/_design/geeklists/_view/geeklists?include_docs=true").then(function(response){
+	$http.get(couchDbUrl + "_design/geeklists/_view/geeklists?include_docs=true").then(function(response){
 		var lists = [];
 
 		response.data.rows.forEach(function(value){
@@ -24,7 +26,6 @@ geeklistMon.controller('GeeklistCtrl', function($scope, $http){
 	var levels = [];
 	var levelLabels = [];
 	var seriesColors = [];
-	var couchDbUrl = 'http://www.hoffy.no:5984/geeklistmon/';
 	
 	$scope.updateTable = function(){
 		console.log("Ran updateTable");
@@ -34,10 +35,14 @@ geeklistMon.controller('GeeklistCtrl', function($scope, $http){
 			
 			$scope.mechanicsChartConfig.loading =  true;
 			$scope.categoriesChartConfig.loading =  true;
+			$scope.boardgames = [];
+			$scope.designers = [];
+			$scope.publishers = [];
 			
 			var urlGeeklist = couchDbUrl + "_design/geeklist/_view/geeklist?reduce=false&include_docs=true&key=\"" + $scope.geeklistId + "\"";
 			
 			$http.get(urlGeeklist).then(function(response){
+				var startTime = Date.now();
 				var boardgames = [];
 				
 				angular.forEach(response.data.rows, function(value, key){
@@ -74,9 +79,26 @@ geeklistMon.controller('GeeklistCtrl', function($scope, $http){
 				
 				$scope.statsDates = [];
 				$scope.selectedBoardgame = null;
-
-				return(true);	
-			}).then(function(){decomposeList($scope.boardgames);});
+				
+				console.log("Fetched boardgames from db in" + (Date.now() - startTime));
+				
+				return(true);
+			}).then(
+				function(){
+					var startTime = Date.now()
+					decomposeList($scope.boardgames);
+					console.log("Ran decompose in " + (Date.now() - startTime));
+					
+					return true;
+				}
+			).then(	
+				function(){
+					console.log("This would fetch geekliststats");
+					var startTime = Date.now()
+					var urlGeeklistStat = couchDbUrl + "_design/geeklist/_view/geeklist?include_docs=true&key=\"" + $scope.geeklistId + "\"";
+					console.log("Fetched geekliststat in " + (Date.now() - startTime));
+				}
+			);
 
 		}
 	};
@@ -377,9 +399,11 @@ geeklistMon.controller('GeeklistCtrl', function($scope, $http){
 	};
 
 	$scope.$broadcast('highchartsng.reflow');
-
-	$scope.predicate = 'name';
-
+	
+	//Default sorting
+	$scope.predicate = 'crets';
+	$scope.reverse = true;
+	
 	$scope.$watch('geeklistId', function(newVal, oldVal){
 		if(newVal != oldVal){
 			$scope.updateTable();
@@ -430,6 +454,10 @@ geeklistMon.controller('GeeklistCtrl', function($scope, $http){
 
 	$scope.displaySection = function(idx){
 		$scope.selection = ""+idx;
+	}
+
+	$scope.showFilters = function(){
+		return $scope.selection === "1"
 	}
 });
 //});

@@ -104,52 +104,44 @@
 			
 			
 			<!-- SWITCH DEFAULT -->
-			<div ng-switch-default>
-				<!-- Filters -->
+			<!-- Filters -->
+			<div ng-show="showFilters()">
 				<h3>Filters</h3>
-					<div style="display: block; width: 100%; clear:left;" class="module">
-						<!-- Filter row 1 -->
-						<div>	
-							<label for="designerddl" style="display: inline;">Designer</label>	
-							<select id="designerddl" ng-model="search.boardgamedesigner" ng-options="item as item for item in designers">
-								<option value="">All</option>
-							</select>
-						
-							<label for="publisherddl" style="display: inline;">Publisher</label>	
-							<select id="publisherddl" ng-model="search.boardgamepublisher" ng-options="item as item for item in publishers">
-								<option value="">All</option>
-							</select>
+				<label for="designerddl" style="display: inline;">Designer</label>	
+				<select id="designerddl" ng-model="search.boardgamedesigner" ng-options="item as item for item in designers">
+					<option value="">All</option>
+				</select>
 					
-							<label for="expansionddl" style="display: inline;">Is Expansion</label>	
-						<select id="expansionddl" ng-model="search.isExpansion">
-								<option value="">All</option>
-								<option value="true">Yes</option>
-								<option value="false">No</option>
-						</select>
-					</div>
-					<!-- Filter row 2 -->
-					<div>
-						<label for="supported_players">Min #players</label>	
-						<input id="supported_players" ng-model="obj.maxplayers"></input>
-						<label for="minimum_year" style="display: inline;">This year or later</label>	
-						<input id="minimum_year" ng-model="obj.yearpublished"></input>
-						<label for="minimum_year" style="display: inline;">Max. playing time</label>	
-						<input id="max_playingtime" ng-model="obj2.playingtime"></input>
-					</div>
-					<div>
-						<label for="mechanicsddl" style="display: inline;">Mechanics</label>	
-						<select id="mechanicsddl" ng-model="search.boardgamemechanic" ng-options="item.name as item.name for item in mechanics">
-							<option value="">All</option>
-						</select>
-						
-						<label for="categoryddl" style="display: inline;">Categories</label>	
-						<select id="categoryddl" ng-model="search.boardgamecategory" ng-options="item.name as item.name for item in categories">
-							<option value="">All</option>
-						</select>
-					</div>
-				</div>
-				<!-- End of filters -->
-				<div>
+				<label for="publisherddl" style="display: inline;">Publisher</label>	
+				<select id="publisherddl" ng-model="search.boardgamepublisher" ng-options="item as item for item in publishers">
+					<option value="">All</option>
+				</select>
+				
+				<label for="expansionddl" style="display: inline;">Is Expansion</label>	
+				<select id="expansionddl" ng-model="search.isExpansion">
+					<option value="">All</option>
+					<option value="true">Yes</option>
+					<option value="false">No</option>
+				</select>
+				<label for="supported_players">Min #players</label>	
+				<input id="supported_players" ng-model="obj.maxplayers"></input>
+				<label for="minimum_year" style="display: inline;">This year or later</label>	
+				<input id="minimum_year" ng-model="obj.yearpublished"></input>
+				<label for="minimum_year" style="display: inline;">Max. playing time</label>	
+				<input id="max_playingtime" ng-model="obj2.playingtime"></input>
+					
+				<label for="mechanicsddl" style="display: inline;">Mechanics</label>	
+				<select id="mechanicsddl" ng-model="search.boardgamemechanic" ng-options="item.name as item.name for item in mechanics">
+					<option value="">All</option>
+				</select>
+					
+				<label for="categoryddl" style="display: inline;">Categories</label>	
+				<select id="categoryddl" ng-model="search.boardgamecategory" ng-options="item.name as item.name for item in categories">
+					<option value="">All</option>
+				</select>
+			</div>
+			<!-- End of filters -->
+			<div ng-switch-default>
 				<table id="geeklist">
 					<thead>
 							<tr>
