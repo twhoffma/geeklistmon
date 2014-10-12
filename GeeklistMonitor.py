@@ -192,20 +192,27 @@ def main():
 	f.close()
 	
 	date_key = time.strftime("%Y-%m-%d")
+	#date_key = time.strftime("2014-10-11")
 	
 	#lists = []	
 	for r in db.view('_design/geeklists/_view/geeklists', None, include_docs="true"):
 		print r
 		#lists.append({'id': r.id, 'name': r.key, r.update})
-	
+		statkey = "[u\'%s', u\'%s\']" % (r.id, date_key)
+		print statkey
+		for k in db.view('_design/geekliststat/_view/geekliststat', None, key=statkey):
+			print k
+	#sys.exit(0)
 	#pdb.set_trace()
+
 
 	boardgames = {}
 	
 	for geeklist in filter(lambda x: x["update"] == "true", lists):
 		print 'Working on ' + str(geeklist["id"])
 		geeklists = {}
-		glStats = {'type': 'geekliststat', 'geeklistid': str(geeklist["id"]), 'date': date_key, 'bgCnt': 0, 'depth': 0, 'glCnt': 0, 'bgHistogram': []}
+		chgts = time.strftime('%Y-%-m-%d %H:%M:%S')
+		glStats = {'type': 'geekliststat', 'geeklistid': str(geeklist["id"]), 'date': date_key, 'bgCnt': 0, 'depth': 0, 'glCnt': 0, 'bgHistogram': [], 'crets': chgts, 'chgts': chgts}
 			
 		extractBoardGames(geeklist["id"], geeklist["id"], geeklists, boardgames, glStats, 0)
 		
@@ -213,6 +220,7 @@ def main():
 		for bgId, bg in boardgames.iteritems():
 			if bg.updated:
 				bgJSON = json.loads(json.dumps(bg, cls=BoardGameEncoder))
+				#This CouchDB api doesn't take kindly to a _rev is None.
 				if bg._rev is None:
 					del bgJSON["_rev"]
 				id, rev = db.save(bgJSON)
