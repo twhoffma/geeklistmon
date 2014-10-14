@@ -41,6 +41,11 @@ geeklistMon.controller('GeeklistCtrl', function($scope, $http){
 			$scope.designers = [];
 			$scope.publishers = [];
 			
+			//TODO: http://www.hoffy.no:5984/geeklistmon/_design/geeklistsort/_view/geeklistsort?startkey=[71143,%20%22playingtime%22,%200]&endkey=[71143,%22playingtime%22,%2015]&include_docs=true
+			//can also be used with crets and &descending=true for dates
+			//TODO: http://www.hoffy.no:5984/geeklistmon/_design/geeklistsort/_view/geeklistsort?startkey=[71143,%20%22playingtime%22,%200]&endkey=[71143,%22playingtime%22,%2015]&limit=2&include_docs=true&startkey_docid=[%22108084%22]
+			//http://www.hoffy.no:5984/geeklistmon/_design/geeklistsort/_view/geeklistsort?startkey=[71143,%22playingtime%22,5,108084]&endkey=[71143,%22playingtime%22,%2015,%20{}]&limit=2&include_docs=true&skip=1
+			//Replace startkey with last rows key on infinite scroll to load more..
 			var urlGeeklist = couchDbUrl + "_design/geeklist/_view/geeklist?reduce=false&include_docs=true&key=\"" + $scope.geeklistId + "\"";
 			
 			$http.get(urlGeeklist).then(function(response){

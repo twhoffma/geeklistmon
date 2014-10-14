@@ -4,7 +4,7 @@
 		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.18.0/es6-shim.min.js"></script>
 		<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 		<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>
+		<script type="text/javascript" src="scripts/angularjs/angular.min.js"></script>
 		<script src="http://code.highcharts.com/stock/highstock.src.js"></script>
 		<script src="./scripts/highcharts-ng-master/src/highcharts-ng.js"></script>
 		<script src="http://code.highcharts.com/modules/drilldown.js"></script>
@@ -130,9 +130,9 @@
 				<label for="supported_players">Min #players</label>	
 				<input id="supported_players" ng-model="obj.maxplayers"></input>
 				<label for="minimum_year" style="display: inline;">This year or later</label>	
-				<input id="minimum_year" ng-model="obj.yearpublished"></input>
+				<input id="minimum_year" ng-model="obj.yearpublished" ng-model-options="{ updateOn: 'default blur', debounce: {'default': 500, 'blur': 0} }"></input>
 				<label for="minimum_year" style="display: inline;">Max. playing time</label>	
-				<input id="max_playingtime" ng-model="obj2.playingtime"></input>
+				<input id="max_playingtime" ng-model="obj2.playingtime" ng-model-options="{ updateOn: 'default blur', debounce: {'default': 500, 'blur': 0} }"></input>
 					
 				<label for="mechanicsddl" style="display: inline;">Mechanics</label>	
 				<select id="mechanicsddl" ng-model="search.boardgamemechanic" ng-options="item.name as item.name for item in mechanics">
@@ -159,7 +159,7 @@
 						</tr>	
 					</thead>
 					<tbody>
-						<tr ng-repeat="boardgame in boardgames | filter:search:ignoreNullComparator | filter:obj:greaterThan | filter:obj2:lessThan | orderBy:predicate:reverse">
+						<tr ng-repeat="boardgame in boardgames | filter:search:ignoreNullComparator | filter:obj:greaterThan | filter:obj2:lessThan | orderBy:predicate:reverse track by boardgame.objectid">
 							<td>
 								<a href="http://www.boardgamegeek.com/boardgame/{{boardgame.objectid}}">{{boardgame.name}}</a>
 								<img src="img/magnify.png" ng-click="updateStatsDateDropdown(boardgame)" style="float:right;" />
